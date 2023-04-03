@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.widget.Button
+import androidx.activity.result.launch
+import androidx.fragment.app.FragmentManager
 import com.example.mycustomview.databinding.ActivityMainBinding
 
 
@@ -18,16 +20,35 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.happyButton
 
-        binding.happyButton.setOnClickListener {
-            binding.emotionalFaceView.happinessState = CustomFaceView.HAPPY
+        val activityLauncher = registerForActivityResult(MyActivityContract()) { result ->
+            binding.textView2.text = result
         }
 
-        binding.sadButton.setOnClickListener {
-            binding.emotionalFaceView.happinessState = CustomFaceView.SAD
+        binding.button2.setOnClickListener {
+            activityLauncher.launch()
         }
+
+        binding.button4.setOnClickListener {
+            supportFragmentManager.setFragmentResultListener("requestKey",this){ key, bundle ->
+                binding.textView2.text = bundle.getString("bundleKey")
+            }
+
+//            supportFragmentManager.beginTransaction()
+//                .add(R.id.fragment_container_view, fragment)
+//                .addToBackStack(null)
+//                .commit()
+
+
+
+        }
+
+
+
+
+
+
 
     }
-    
+
 }
